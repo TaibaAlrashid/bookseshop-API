@@ -1,18 +1,15 @@
-const { response } = require("express");
 const express = require("express");
-const products = require("./products");
+const productRout = require("./API/product/routes");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const app = express();
 
 //Middleware
 app.use(cors());
-
-//Routes
-app.get("/products", (req, res) => {
-  res.json(products);
-});
+app.use(bodyParser.json());
+app.use("/products", productRout);
 
 app.listen(8000, () => {
-  console.log("HELLO!");
+  console.log("The application is running on localhost:8000");
 });
