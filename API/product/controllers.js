@@ -1,52 +1,48 @@
-const slugify = require("slugify");
 const { Book } = require("../../db/models");
 
-exports.productFetch = async (req, res) => {
+exports.fetchProduct = async (productId, next) => {
+  try {
+    const product = await Book.findByPk(productId);
+    return product;
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.productFetch = async (req, res, next) => {
   try {
     const products = await Book.findAll({
       attributes: { excludes: ["createdAt", "updatedAt"] },
     });
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
-exports.productDelete = async (req, res) => {
-  const { productId } = req.params;
+exports.productDelete = async (req, res, next) => {
   try {
-    const foundProduct = await Book.findByPk(productId);
-    if (foundProduct) {
-      foundProduct.destroy();
-      res.status(204).end();
-    } else {
-      res.status(404).json({ message: "Product Not Found." });
-    }
+    await req.product.destroy();
+    res.status(204).end();
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
-exports.productCreate = async (req, res) => {
+exports.productCreate = async (req, res, next) => {
   try {
     const newProduct = await Book.create(req.body);
     res.status(201).json(newProduct);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
-exports.productUpdate = async (req, res) => {
-  const { productId } = req.params;
+exports.productUpdate = async (req, res, next) => {
   try {
-    const foundProduct = await Book.findByPk(productId);
-    if (foundProduct) {
-      foundProduct.update();
-      res.status(204).end();
-    } else {
-      res.status(404).json({ message: "Product Not Found." });
-    }
+    await req.product.update(req.body);
+    res.status(204).end();
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
