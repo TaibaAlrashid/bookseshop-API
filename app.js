@@ -13,7 +13,7 @@ app.use("/products", productRout);
 
 const run = async () => {
   try {
-    await db.sequelize.authenticate();
+    await db.sequelize.sync({ force: true });
     console.log("connection successful");
     app.listen(8000, () => {
       console.log("The application is running on localhost:8000");
