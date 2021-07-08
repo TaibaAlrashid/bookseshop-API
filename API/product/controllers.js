@@ -1,4 +1,4 @@
-const { Book } = require("../../db/models");
+const { Book, Shop } = require("../../db/models");
 
 exports.fetchProduct = async (productId, next) => {
   try {
@@ -12,7 +12,12 @@ exports.fetchProduct = async (productId, next) => {
 exports.productFetch = async (req, res, next) => {
   try {
     const products = await Book.findAll({
-      attributes: { excludes: ["createdAt", "updatedAt"] },
+      attributes: { excludes: ["shopId", "createdAt", "updatedAt"] },
+      include: {
+        model: Shop,
+        as: "shop",
+        attributes: ["name"],
+      },
     });
     res.json(products);
   } catch (error) {
@@ -24,16 +29,6 @@ exports.productDelete = async (req, res, next) => {
   try {
     await req.product.destroy();
     res.status(204).end();
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.productCreate = async (req, res, next) => {
-  try {
-    if (req.file) req.body.image = `http://${req.get("host")}/${req.file.path}`;
-    const newProduct = await Book.create(req.body);
-    res.status(201).json(newProduct);
   } catch (error) {
     next(error);
   }

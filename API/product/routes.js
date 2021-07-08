@@ -4,7 +4,6 @@ const multer = require("multer");
 const {
   productFetch,
   productDelete,
-  productCreate,
   productUpdate,
   fetchProduct,
 } = require("./controllers");
@@ -32,8 +31,6 @@ const upload = multer({ storage });
 router.get("/", productFetch);
 
 router.delete("/:productId", productDelete);
-
-router.post("/", upload.single("image"), productCreate);
 
 router.put("/:productId", upload.single("image"), productUpdate);
 
