@@ -11,6 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use("/products", productRout);
+app.use("/media", express.static("media"));
 
 app.use((err, req, res, next) => {
   res

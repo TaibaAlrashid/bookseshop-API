@@ -31,6 +31,7 @@ exports.productDelete = async (req, res, next) => {
 
 exports.productCreate = async (req, res, next) => {
   try {
+    if (req.file) req.body.image = `http://${req.get("host")}/${req.file.path}`;
     const newProduct = await Book.create(req.body);
     res.status(201).json(newProduct);
   } catch (error) {
@@ -40,8 +41,9 @@ exports.productCreate = async (req, res, next) => {
 
 exports.productUpdate = async (req, res, next) => {
   try {
-    await req.product.update(req.body);
-    res.status(204).end();
+    if (req.file) req.body.image = `http://${req.get("host")}/${req.file.path}`;
+    const updatedProduct = await req.product.update(req.body);
+    res.json(updatedProduct);
   } catch (error) {
     next(error);
   }

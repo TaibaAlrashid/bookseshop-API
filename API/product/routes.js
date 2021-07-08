@@ -1,4 +1,5 @@
 const express = require("express");
+const multer = require("multer");
 
 const {
   productFetch,
@@ -10,7 +11,7 @@ const {
 const router = express.Router();
 
 router.param("productId", async (req, res, next, productId) => {
-  const product = await fetchproduct(productId, next);
+  const product = await fetchProduct(productId, next);
   if (product) {
     req.product = product;
     next();
@@ -20,13 +21,20 @@ router.param("productId", async (req, res, next, productId) => {
     next(error);
   }
 });
+const storage = multer.diskStorage({
+  destination: "./media",
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}${file.originalname}`);
+  },
+});
+const upload = multer({ storage });
 
 router.get("/", productFetch);
 
 router.delete("/:productId", productDelete);
 
-router.post("/", productCreate);
+router.post("/", upload.single("image"), productCreate);
 
-router.put("/:productId", productUpdate);
+router.put("/:productId", upload.single("image"), productUpdate);
 
 module.exports = router;
