@@ -5,6 +5,7 @@ const userRout = require("./API/user/routes");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const passport = require("passport");
+const { localStrategy } = require("./middleware/passport");
 
 //Database
 const db = require("./db/models/index");
@@ -14,6 +15,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(passport.initialize());
+passport.use(localStrategy);
 
 //ProductRoutes
 app.use("/products", productRout);
