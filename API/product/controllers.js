@@ -26,19 +26,35 @@ exports.productFetch = async (req, res, next) => {
 };
 
 exports.productDelete = async (req, res, next) => {
+  const foundShop = await Shop.findByPk(req.product.shopId);
+
   try {
-    await req.product.destroy();
-    res.status(204).end();
+    if (foundShop.userId === req.user.id) {
+      await req.product.destroy();
+      res.status(204).end();
+    } else {
+      const err = new Error("Unauthorized!");
+      err.status = 401;
+      return next(err);
+    }
   } catch (error) {
     next(error);
   }
 };
 
 exports.productUpdate = async (req, res, next) => {
+  const foundShop = await Shop.findByPk(req.product.shopId);
   try {
-    if (req.file) req.body.image = `http://${req.get("host")}/${req.file.path}`;
-    const updatedProduct = await req.product.update(req.body);
-    res.json(updatedProduct);
+    if (foundShop.userId === req.user.id) {
+      if (req.file)
+        req.body.image = `http://${req.get("host")}/${req.file.path}`;
+      const updatedProduct = await req.product.update(req.body);
+      res.json(updatedProduct);
+    } else {
+      const err = new Error("Unauthorized!");
+      err.status = 401;
+      return next(err);
+    }
   } catch (error) {
     next(error);
   }

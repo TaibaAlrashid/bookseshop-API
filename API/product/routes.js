@@ -1,5 +1,4 @@
 const express = require("express");
-const multer = require("multer");
 
 const {
   productFetch,
@@ -7,6 +6,9 @@ const {
   productUpdate,
   fetchProduct,
 } = require("./controllers");
+
+const multer = require("multer");
+const passport = require("passport");
 const router = express.Router();
 
 router.param("productId", async (req, res, next, productId) => {
@@ -20,6 +22,7 @@ router.param("productId", async (req, res, next, productId) => {
     next(error);
   }
 });
+
 const storage = multer.diskStorage({
   destination: "./media",
   filename: (req, file, cb) => {
@@ -30,8 +33,17 @@ const upload = multer({ storage });
 
 router.get("/", productFetch);
 
-router.delete("/:productId", productDelete);
+router.delete(
+  "/:productId",
+  passport.authenticate("jwt", { session: false }),
+  productDelete
+);
 
-router.put("/:productId", upload.single("image"), productUpdate);
+router.put(
+  "/:productId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  productUpdate
+);
 
 module.exports = router;
