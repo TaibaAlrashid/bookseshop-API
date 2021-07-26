@@ -2,6 +2,7 @@ const express = require("express");
 const productRout = require("./API/product/routes");
 const shopRout = require("./API/shop/routes");
 const userRout = require("./API/user/routes");
+const orderRout = require("./API/order/routes");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const passport = require("passport");
@@ -23,6 +24,7 @@ passport.use(jwtStratgey);
 app.use("/products", productRout);
 app.use("/shops", shopRout);
 app.use(userRout);
+app.use(orderRout);
 app.use("/media", express.static("media"));
 
 //Error handling middleware

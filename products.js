@@ -13,7 +13,7 @@ const products = [
     name: "The Power Of Now",
     slug: "the-power-of-now",
     price: 5,
-    Description: "by Robin S. Sharma, Print length: paperback 258 pages",
+    Description: "by David R. Hawkins, Print length: paperback 200 pages",
     image:
       "https://image.ebooks.com/previews/001/001168/001168805/001168805.jpg",
   },
@@ -22,7 +22,7 @@ const products = [
     name: "The Monk Who Sold His Ferrari",
     slug: "the-monk-who-sold-his-ferrari",
     price: 5,
-    Description: "by David R. Hawkins, Print length: paperback 200 pages",
+    Description: "by Robin S. Sharma, Print length: paperback 258 pages",
     image:
       "https://www.asiabooks.com/media/catalog/product/cache/1/image/264x/17f82f742ffe127f42dca9de82fb58b1/9/7/9780061125898.jpg",
   },

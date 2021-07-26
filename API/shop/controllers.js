@@ -2,7 +2,7 @@ const { Shop, Book } = require("../../db/models");
 
 exports.fetchShop = async (shopId, next) => {
   try {
-    const shop = await Book.findByPk(shopId);
+    const shop = await Shop.findByPk(shopId);
     return shop;
   } catch (error) {
     next(error);
